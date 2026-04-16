@@ -1012,16 +1012,16 @@ footer {
       <div class="form-grid">
         <div class="fgroup">
           <label>Nome</label>
-          <input type="text" placeholder="Seu nome completo">
+          <input id="f-nome" type="text" placeholder="Seu nome completo">
         </div>
         <div class="fgroup">
           <label>WhatsApp</label>
-          <input type="tel" placeholder="(15) 99999-9999">
+          <input id="f-whats" type="tel" placeholder="(15) 99999-9999">
         </div>
       </div>
       <div class="fgroup">
         <label>Especialidade de interesse</label>
-        <select>
+        <select id="f-servico">
           <option value="">Selecione</option>
           <option>Neuronutrição &amp; Saúde Mental</option>
           <option>Nutrição Clínica &amp; Funcional</option>
@@ -1032,18 +1032,16 @@ footer {
       </div>
       <div class="fgroup">
         <label>Modalidade</label>
-        <select>
+        <select id="f-modalidade">
           <option>Online</option>
           <option>Presencial — Sorocaba/SP</option>
         </select>
       </div>
       <div class="fgroup">
         <label>Mensagem (opcional)</label>
-        <textarea placeholder="Conte um pouco sobre o que busca..."></textarea>
+        <textarea id="f-msg" placeholder="Conte um pouco sobre o que busca..."></textarea>
       </div>
-      <a href="https://wa.me/5515981460645?text=Olá%20Amanda!%20Gostaria%20de%20agendar%20uma%20consulta." target="_blank">
-        <button class="btn-submit">Enviar pelo WhatsApp</button>
-      </a>
+      <button class="btn-submit" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
     </div>
   </div>
 </section>
@@ -1081,6 +1079,7 @@ footer {
 </a>
 
 <script>
+// Scroll reveal
 const reveals = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
@@ -1091,6 +1090,39 @@ const io = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.08 });
 reveals.forEach(el => io.observe(el));
+
+// WhatsApp form
+function enviarWhatsApp() {
+  const nome       = document.getElementById('f-nome').value.trim();
+  const whats      = document.getElementById('f-whats').value.trim();
+  const serv       = document.getElementById('f-servico').value;
+  const modalidade = document.getElementById('f-modalidade').value;
+  const msg        = document.getElementById('f-msg').value.trim();
+
+  if (!nome) {
+    alert('Por favor, informe seu nome.');
+    return;
+  }
+  if (!serv) {
+    alert('Por favor, selecione uma especialidade.');
+    return;
+  }
+
+  let texto = `Olá, Amanda! Me chamo *${nome}* e tenho interesse em agendar uma consulta.
+
+`;
+  texto += `*Especialidade:* ${serv}
+`;
+  texto += `*Modalidade:* ${modalidade}
+`;
+  if (whats) texto += `*WhatsApp:* ${whats}
+`;
+  if (msg)   texto += `
+*Mensagem:* ${msg}`;
+
+  const url = `https://wa.me/5515981460645?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
+}
 </script>
 
 </body>
